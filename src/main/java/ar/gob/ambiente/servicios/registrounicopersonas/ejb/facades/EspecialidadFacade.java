@@ -65,7 +65,7 @@ public class EspecialidadFacade extends AbstractFacade<Especialidad> {
         String queryString = "SELECT esp FROM Especialidad esp "
                 + "WHERE esp.nombre = :nombre";
         Query q = em.createQuery(queryString)
-                .setParameter("stringParam", nombre);
+                .setParameter("nombre", nombre);
         lCp = q.getResultList();
         if(!lCp.isEmpty()){
             return lCp.get(0);

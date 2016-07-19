@@ -48,7 +48,8 @@ import javax.persistence.Query;
         em = getEntityManager();        
         List<PerJuridica> result;
         String queryString = "SELECT pj FROM PerJuridica pj " 
-                + "WHERE pj.admin.habilitado = true";                   
+                + "WHERE pj.admin.habilitado = true "
+                + "ORDER BY pj.razonSocial";                   
         Query q = em.createQuery(queryString);
         result = q.getResultList();
         return result;
@@ -143,5 +144,5 @@ import javax.persistence.Query;
                 .setParameter("razonSocial", "%" + razonSocial + "%");
         result = q.getResultList();
         return result;
-    }     
+    }   
 }
