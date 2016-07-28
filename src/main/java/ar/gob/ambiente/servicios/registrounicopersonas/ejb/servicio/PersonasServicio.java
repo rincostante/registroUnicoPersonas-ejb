@@ -3,6 +3,7 @@
 package ar.gob.ambiente.servicios.registrounicopersonas.ejb.servicio;
 
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.entities.Actividad;
+import ar.gob.ambiente.servicios.registrounicopersonas.ejb.entities.Actividadesrubro;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.entities.Especialidad;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.entities.Establecimiento;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.entities.Estado;
@@ -12,8 +13,10 @@ import ar.gob.ambiente.servicios.registrounicopersonas.ejb.entities.PerJuridica;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.entities.ReasignaRazonSocial;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.entities.TipoEstablecimiento;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.entities.TipoPersonaJuridica;
+import ar.gob.ambiente.servicios.registrounicopersonas.ejb.entities.TmpEstDpyra;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.entities.Usuario;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.ActividadRupFacade;
+import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.ActividadesrubroFacade;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.EspecialidadFacade;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.EstablecimientoRupFacade;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.EstadoFacade;
@@ -23,6 +26,7 @@ import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.PerJuridicaFa
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.ReasignaRazonSocialFacade;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.TipoEstablecimientoFacade;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.TipoPersonaJuridicaFacade;
+import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.TmpEstDpyraFacade;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.UsuarioRupFacade;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,8 +67,84 @@ public class PersonasServicio {
     private ExpedienteFacade expFacade;
     @EJB
     private ReasignaRazonSocialFacade reasignaRazSocFacade;
+    @EJB
+    private TmpEstDpyraFacade tmpEstFacade;
+    @EJB
+    private ActividadesrubroFacade actRubroFacade;
     
     private static final Logger logger = Logger.getLogger(Establecimiento.class.getName());
+    
+    /**************
+     * Migración **
+     **************/
+    
+    /**
+     * Método para crear un Establecimiento a migrar proveniente de la DPyRA
+     * @param tmpEstDpyra 
+     */
+    public void createTempEst(TmpEstDpyra tmpEstDpyra){
+        Date date;
+        try{
+            tmpEstFacade.create(tmpEstDpyra);
+            logger.log(Level.INFO, "Ejecutando el método createTempEst() desde el servicio RUP");
+        }catch(Exception ex){
+            date = new Date(System.currentTimeMillis());
+            logger.log(Level.SEVERE, "Hubo un error al ejecutar el método createTempEst() desde el servicio RUP. " + date + ". ", ex);
+        }
+    }
+    
+    public List<TmpEstDpyra> getEstDpyra(){
+        List<TmpEstDpyra> lstEst = new ArrayList();
+        Date date;
+        try{
+            lstEst = tmpEstFacade.findAll();
+            logger.log(Level.INFO, "Ejecutando el método getEstDpyra() desde el servicio RUP");
+        }
+        catch (Exception ex){
+            date = new Date(System.currentTimeMillis());
+            logger.log(Level.SEVERE, "Hubo un error al ejecutar el método getEstDpyra() desde el servicio RUP. " + date + ". ", ex);
+        }      
+        return lstEst;
+    }
+    
+    public void editTmpEstDpyra(TmpEstDpyra est){
+        Date date;
+        try{
+            tmpEstFacade.edit(est);
+            logger.log(Level.INFO, "Ejecutando el método editTmpEstDpyra() desde el servicio RUP");
+        }catch(Exception ex){
+            date = new Date(System.currentTimeMillis());
+            logger.log(Level.SEVERE, "Hubo un error al ejecutar el método editTmpEstDpyra() desde el servicio RUP. " + date + ". ", ex);
+        }
+    }    
+    
+    public Actividadesrubro getActRubroPorCodigo(String codigo){
+        Actividadesrubro actRub;
+        Date date;
+        try{
+            actRub = actRubroFacade.getByCodigo(codigo);
+            logger.log(Level.INFO, "Ejecutando el método getActRubroPorCodigo() desde el servicio RUP");
+        }catch(Exception ex){
+            actRub = null;
+            date = new Date(System.currentTimeMillis());
+            logger.log(Level.SEVERE, "Hubo un error al ejecutar el método getActRubroPorCodigo() desde el servicio RUP. " + date + ". ", ex);
+        }
+        return actRub; 
+    }
+    
+    public Actividad getActividadPorNombre(String nombre){
+        Actividad act;
+        Date date;
+        try{
+            act = actividadFacade.getExistente(nombre);
+            logger.log(Level.INFO, "Ejecutando el método getActividadPorNombre() desde el servicio RUP");
+        }catch(Exception ex){
+            act = null;
+            date = new Date(System.currentTimeMillis());
+            logger.log(Level.SEVERE, "Hubo un error al ejecutar el método getActividadPorNombre() desde el servicio RUP. " + date + ". ", ex);
+        }
+        return act; 
+    }
     
     /**********************
      * Establecimientos ***
@@ -579,6 +659,21 @@ public class PersonasServicio {
             logger.log(Level.SEVERE, "Hubo un error al ejecutar el método getTipoPersonaJuridicaAll() desde el servicio RUP. " + date + ". ", ex);
         }
         return lstPerJur;
+    }
+    
+    public TipoPersonaJuridica getTipoPerJurByNombre(String nombre){
+        TipoPersonaJuridica tipoPerJur;
+        Date date;  
+        
+        try{
+            tipoPerJur = tipoPerJurFacade.getExistente(nombre);
+            logger.log(Level.INFO, "Ejecutando el método getTipoPerJurByNombre() desde el servicio RUP");
+        }catch(Exception ex){
+            tipoPerJur = null;
+            date = new Date(System.currentTimeMillis());
+            logger.log(Level.SEVERE, "Hubo un error al ejecutar el método getTipoPerJurByNombre() desde el servicio RUP. " + date + ". ", ex);
+        }
+        return tipoPerJur;
     }
     
     public Estado getEstadoByNombre(String nombre){

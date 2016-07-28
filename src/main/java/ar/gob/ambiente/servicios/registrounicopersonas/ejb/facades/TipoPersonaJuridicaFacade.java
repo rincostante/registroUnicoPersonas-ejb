@@ -39,7 +39,7 @@ public class TipoPersonaJuridicaFacade extends AbstractFacade<TipoPersonaJuridic
         String queryString = "SELECT tpj FROM TipoPersonaJuridica tpj "
                 + "WHERE tpj.nombre = :nombre";
         Query q = em.createQuery(queryString)
-                .setParameter("stringParam", nombre);
+                .setParameter("nombre", nombre);
         lCp = q.getResultList();
         if(!lCp.isEmpty()){
             return lCp.get(0);

@@ -22,12 +22,12 @@ public class Domicilio implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column (nullable=false, length=50, unique=true)
+    @Column (nullable=false, length=50)
     @NotNull(message = "El campo Calle no puede quedar nulo")
     @Size(message = "El campo Calle debe tener entre 1 y 50 caracteres", min = 1, max = 50)
     private String calle; 
     
-    @Column (nullable=false, length=50, unique=true)
+    @Column (nullable=false, length=50)
     @NotNull(message = "El campo Número no puede quedar nulo")
     @Size(message = "El campo Calle debe tener entre 1 y 10 caracteres", min = 1, max = 10)
     private String numero;
