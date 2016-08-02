@@ -1,5 +1,3 @@
-
-
 package ar.gob.ambiente.servicios.registrounicopersonas.ejb.servicio;
 
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.entities.Actividad;
@@ -28,22 +26,22 @@ import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.TipoEstableci
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.TipoPersonaJuridicaFacade;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.TmpEstDpyraFacade;
 import ar.gob.ambiente.servicios.registrounicopersonas.ejb.facades.UsuarioRupFacade;
+import interfases.PersonasServicioInterfazRemota;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 /**
  * Fachada que expone los métodos de acceso a datos para el servicio web
  * @author rincostante
  */
+
 @Stateless
-@LocalBean
-public class PersonasServicio {
+public class PersonasServicio implements PersonasServicioInterfazRemota  {
 
     @EJB
     private EstablecimientoRupFacade estFacade;
@@ -82,6 +80,7 @@ public class PersonasServicio {
      * Método para crear un Establecimiento a migrar proveniente de la DPyRA
      * @param tmpEstDpyra 
      */
+    @Override
     public void createTempEst(TmpEstDpyra tmpEstDpyra){
         Date date;
         try{
@@ -93,6 +92,7 @@ public class PersonasServicio {
         }
     }
     
+    @Override
     public List<TmpEstDpyra> getEstDpyra(){
         List<TmpEstDpyra> lstEst = new ArrayList();
         Date date;
@@ -750,6 +750,7 @@ public class PersonasServicio {
         }
     }
     
+    @Override
     public void deleteRazSoc(ReasignaRazonSocial reasRazSoc){
         Date date;
         try{
