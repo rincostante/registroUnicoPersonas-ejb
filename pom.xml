@@ -28,6 +28,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>ar.gob.ambiente.servicios</groupId>
+            <artifactId>registroUnicoPersonas-interfases</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
@@ -84,5 +89,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
