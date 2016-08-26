@@ -130,10 +130,33 @@ public class TmpEstDpyra implements Serializable {
     
     private Long idEstRup;
     
+    private Long idEstGel;
+    
+    @Column (length=1000)
+    @Size(message = "El campo est_actividad debe tener entre 1 y 10 caracteres", min = 1, max = 1000)
+    private String mensaje;
+    
     
     /**********************
      * Métodos de acceso **
      **********************/
+    
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
+    
+    public Long getIdEstGel() {
+        return idEstGel;
+    }
+
+    public void setIdEstGel(Long idEstGel) {
+        this.idEstGel = idEstGel;
+    }
     
     public Long getIdRsRup() {
         return idRsRup;
